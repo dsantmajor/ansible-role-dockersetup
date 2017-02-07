@@ -1,2 +1,42 @@
 ---
 # tasks file for ansible-role-dockersetup
+- name: Run the  "apt-get update" as a separate step
+  apt:
+    update_cache: yes
+# Add the GPG key for the official Docker repository to the system:
+
+# - apt_key:
+#     keyserver: hkp://p80.pool.sks-keyservers.net:80
+#     id: 58118E89F3A912897C070ADBF76221572C52609D
+
+
+# sudo apt-add-repository 'deb https://apt.dockerproject.org/repo ubuntu-xenial main'
+
+# Add specified repository into sources list.
+# - apt_repository:
+#     repo: deb https://apt.dockerproject.org/repo ubuntu-xenial main
+#     state: present
+
+
+- name: Add specific key
+  apt_key: id={{docker_repo_key}} keyserver=hkp://p80.pool.sks-keyservers.net:80 state=present
+#
+# - name: Install https apt transport package
+#   apt: pkg=apt-transport-https state=present update_cache=yes
+
+- name: Add docker repo
+  apt_repository: repo='deb {{docker_repo}} ubuntu-{{ansible_distribution_release}} main' state=present
+
+
+
+#
+#
+# - name: Run the  "apt-get update" as a separate step
+#   apt:
+#     update_cache: yes
+
+- name: Verify that apt is pulling from the right repository
+  command: apt-cache policy docker-engine
+
+- name: install docker engine
+  apt: name=docker-engine update_cache=yes state=present

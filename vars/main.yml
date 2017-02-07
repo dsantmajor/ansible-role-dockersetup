@@ -1,2 +1,4 @@
 ---
 # vars file for ansible-role-dockersetup
+docker_repo_key : 58118E89F3A912897C070ADBF76221572C52609D
+docker_repo: https://apt.dockerproject.org/repo
